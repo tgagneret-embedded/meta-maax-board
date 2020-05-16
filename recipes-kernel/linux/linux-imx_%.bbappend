@@ -21,10 +21,11 @@ COMPATIBLE_MACHINE = "(mx8)"
 # machine, with different entry points
 KERNEL_EXTRA_ARGS += "LOADADDR=${UBOOT_ENTRYPOINT}"
 
-
 SRC_URI[sha256sum] = "ef27e600557f1be6bf74347aba0b9611c0c7f09dcc0a413cb54cf20a93f9d41e"
 
-
-do_configure() {
-    make em-sbc-imx8m_defconfig
+# linux-imx recipe copy a defconfig in SRC_URI, since it is already in the repository, copy it in the workdir instead
+do_copydefconfig() {
+    cp ${S}/arch/arm64/configs/em-sbc-imx8m_defconfig ${WORKDIR}/defconfig
 }
+
+addtask copydefconfig before do_preconfigure after unpack
